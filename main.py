@@ -39,12 +39,12 @@ def get_all_posts():
     posts = BlogPost.query.all()
     return render_template("index.html", all_posts=posts)
 
-
+#register users
 @app.route('/register')
 def register():
     return render_template("register.html")
 
-
+#login to the site
 @app.route('/login')
 def login():
     return render_template("login.html")
