@@ -64,14 +64,18 @@ def register():
     form = RegisterForm()
     #check if validation
     if form.validate_on_submit() and request.method == "POST":
-        #hash and salt password
-        hashed_passowrd = werkzeug.security.generate_password_hash(form.password.data, method='pbkdf2:sha256', salt_length=8)
-        #create new user object
-        new_user = User(email = form.email.data, name = form.name.data, password = hashed_passowrd)
-        db.session.add(new_user)
-        db.session.commit()
-        return redirect(url_for("get_all_posts"))
+        user = User.query.filter_by(email=form.email.data).first()
+        if user != None:
+            flash("User already exist")
+        else:
 
+            #hash and salt password
+            hashed_passowrd = werkzeug.security.generate_password_hash(form.password.data, method='pbkdf2:sha256', salt_length=8)
+            #create new user object
+            new_user = User(email = form.email.data, name = form.name.data, password = hashed_passowrd)
+            db.session.add(new_user)
+            db.session.commit()
+            return redirect(url_for("get_all_posts"))
     return render_template("register.html", form=form)
 
 #login to the site
