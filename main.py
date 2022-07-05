@@ -56,7 +56,10 @@ db.create_all()
 @app.route('/')
 def get_all_posts():
     posts = BlogPost.query.all()
-    return render_template("index.html", all_posts=posts)
+    user_id = None
+    if current_user.is_authenticated:
+        user_id = current_user.id
+    return render_template("index.html", all_posts=posts, user_id=user_id)
 
 #register users
 @app.route('/register', methods=["POST", "GET"])
