@@ -121,7 +121,7 @@ def login():
             flash("Wrong password or username", "warning")
     return render_template("login.html", form=form)
 
-
+#logout route
 @app.route('/logout')
 def logout():
     logout_user()
