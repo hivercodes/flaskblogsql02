@@ -146,6 +146,7 @@ def show_post(post_id):
     requested_post = BlogPost.query.get(post_id)
     form = CommentForm()
     user_id = None
+    coms = []
     if current_user.is_authenticated:
         user_id = current_user.id
     if form.validate_on_submit() and request.method == "POST":
@@ -155,7 +156,13 @@ def show_post(post_id):
             parent_post=requested_post)
         db.session.add(new_comment)
         db.session.commit()
-    return render_template("post.html", post=requested_post, form=form, user_id=user_id)
+    if request.method == "GET":
+
+        comments = Comment.query.all()
+        for comment in comments:
+            if comment.parent_post.id == post_id:
+                coms.append(comment)
+    return render_template("post.html", post=requested_post, form=form, user_id=user_id, comments=coms)
 
 
 @app.route("/about")
