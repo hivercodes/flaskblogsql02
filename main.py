@@ -148,6 +148,13 @@ def show_post(post_id):
     user_id = None
     if current_user.is_authenticated:
         user_id = current_user.id
+    if form.validate_on_submit() and request.method == "POST":
+        new_comment = Comment(
+            text=form.comment_field.data,
+            comment_author=current_user,
+            parent_post=requested_post)
+        db.session.add(new_comment)
+        db.session.commit()
     return render_template("post.html", post=requested_post, form=form, user_id=user_id)
 
 
