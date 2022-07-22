@@ -24,6 +24,15 @@ db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+gravatar = Gravatar(app,
+                    size=100,
+                    rating='g',
+                    default='retro',
+                    force_default=False,
+                    force_lower=False,
+                    use_ssl=False,
+                    base_url=None)
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -158,7 +167,7 @@ def show_post(post_id):
         db.session.commit()
     if request.method == "GET":
         coms = Comment.query.filter_by(post_id=post_id).all()
-    return render_template("post.html", post=requested_post, form=form, user_id=user_id, comments=coms)
+    return render_template("post.html", post=requested_post, form=form, user_id=user_id, comments=coms, gravatar=gravatar)
 
 
 @app.route("/about")
