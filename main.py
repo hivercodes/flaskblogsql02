@@ -157,11 +157,7 @@ def show_post(post_id):
         db.session.add(new_comment)
         db.session.commit()
     if request.method == "GET":
-
-        comments = Comment.query.all()
-        for comment in comments:
-            if comment.parent_post.id == post_id:
-                coms.append(comment)
+        coms = Comment.query.filter_by(post_id=post_id).all()
     return render_template("post.html", post=requested_post, form=form, user_id=user_id, comments=coms)
 
 
